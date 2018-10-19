@@ -15,4 +15,3 @@ deploy:
     tags: true
     distributions: sdist bdist_wheel
     repo: sw4iot/sw4iot-etcd
-    condition: "$TOXENV == py27"
