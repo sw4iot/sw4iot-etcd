@@ -17,11 +17,11 @@ requirements = load_reqs('requirements.txt')
 
 setuptools.setup(
     name="sw4iot-etcd",
-    version="0.0.7",
+    version="0.0.10",
     author="SOFTWAY4IoT",
     author_email="softway4iot@gmail.com",
     description="Etcd of SOFTWAY4IoT",
-    license="MIT License",
+    license="Apache Software License",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/sw4iot/sw4iot-etcd",
@@ -36,9 +36,13 @@ setuptools.setup(
     include_package_data=True,
     zip_safe=False,
     classifiers=[
-        'Programming Language :: Python :: 2.7',
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        'Development Status :: 3 - Alpha',
+        'License :: OSI Approved :: Apache Software License',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
         "Operating System :: OS Independent",
+        'Programming Language :: Python :: 2.7',
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
     ]
 )
