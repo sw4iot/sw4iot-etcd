@@ -1,0 +1,21 @@
+language: python
+python:
+    - 2.7
+    - 3.5
+    - 3.6
+
+install:
+    - pip install -U tox tox-travis
+
+script: tox
+
+deploy:
+  provider: pypi
+  user: sw4iot
+  password:
+    secure:
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: sw4iot/sw4iot-etcd
+    condition: $TOXENV == py27
