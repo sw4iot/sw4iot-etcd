@@ -37,6 +37,7 @@ class Sw4iotEtcd:
     # Slice
     ###
     def add_slice(self, slice, network):
+        self.etcd.put('{}/slice/list/{}'.format(ETCD_PREFIX, slice), slice)
         self.etcd.put('{}/slice/{}/network'.format(ETCD_PREFIX, slice), json.dumps(network))
 
     def get_slice(self, slice):
@@ -44,12 +45,26 @@ class Sw4iotEtcd:
         return json.loads(slice) if slice else None
 
     def delete_slice(self, slice):
-        return self.etcd.delete('{}/slice/{}/network'.format(ETCD_PREFIX, slice))
+        self.etcd.delete('{}/slice/list/{}'.format(ETCD_PREFIX, slice))
+        return self.etcd.delete_prefix('{}/slice/{}'.format(ETCD_PREFIX, slice))
+
+    ###
+    # Slice list
+    ###
+    def get_slice_list(self):
+        return [slice[0] for slice in self.etcd.get_prefix('{}/slice/list'.format(ETCD_PREFIX))]
+
+    ###
+    # Slice info
+    ###
+    def get_slice_info(self, slice):
+        return self.etcd.get('{}/slice/{}/info'.format(ETCD_PREFIX, slice))[0]
 
     ###
     # Slice device
     ###
     def add_slice_device(self, slice, device, data):
+        self.etcd.put('{}/slice/{}/device/list/{}'.format(ETCD_PREFIX, slice, device), device)
         self.etcd.put('{}/slice/{}/device/{}'.format(ETCD_PREFIX, slice, device), json.dumps(data))
 
     def get_slice_device(self, slice, device):
@@ -57,12 +72,17 @@ class Sw4iotEtcd:
         return json.loads(dev) if dev else None
 
     def delete_slice_device(self, slice, device):
+        self.etcd.delete('{}/slice/{}/device/list/{}'.format(ETCD_PREFIX, slice, device))
         return self.etcd.delete('{}/slice/{}/device/{}'.format(ETCD_PREFIX, slice, device))
+
+    def get_slice_devices(self, slice):
+        return [device[0] for device in self.etcd.get_prefix('{}/slice/{}/device/list'.format(ETCD_PREFIX, slice))]
 
     ###
     # Slice gateway
     ###
     def add_slice_gw(self, slice, gateway, data):
+        self.etcd.put('{}/slice/{}/gateway/list/{}'.format(ETCD_PREFIX, slice, gateway), gateway)
         self.etcd.put('{}/slice/{}/gateway/{}'.format(ETCD_PREFIX, slice, gateway), json.dumps(data))
 
     def get_slice_gw(self, slice, gateway):
@@ -70,7 +90,11 @@ class Sw4iotEtcd:
         return json.loads(gw) if gw else None
 
     def delete_slice_gw(self, slice, gateway):
+        self.etcd.delete('{}/slice/{}/gateway/list/{}'.format(ETCD_PREFIX, slice, gateway))
         return self.etcd.delete_prefix('{}/slice/{}/gateway/{}'.format(ETCD_PREFIX, slice, gateway))
+
+    def get_slice_gws(self, slice):
+        return [gw[0] for gw in self.etcd.get_prefix('{}/slice/{}/gateway/list'.format(ETCD_PREFIX, slice))]
 
     ###
     # Gateway
@@ -87,6 +111,7 @@ class Sw4iotEtcd:
         return status
 
     def set_gw(self, gateway, data):
+        self.etcd.put('{}/gateway/list/{}'.format(ETCD_PREFIX, gateway), gateway)
         self.etcd.put('{}/gateway/{}/info'.format(ETCD_PREFIX, gateway), json.dumps(data))
 
     def get_gw(self, gateway):
@@ -94,16 +119,17 @@ class Sw4iotEtcd:
         return json.loads(gw_data) if gw_data else None
 
     def delete_gw(self, gateway):
+        self.etcd.delete('{}/gateway/list/{}'.format(ETCD_PREFIX, gateway), gateway)
         return self.etcd.delete_prefix('{}/gateway/{}'.format(ETCD_PREFIX, gateway))
 
     def get_gw_list(self):
-        return self.etcd.get_prefix('{}/gateway/'.format(ETCD_PREFIX))
+        return [gw[0] for gw in self.etcd.get_prefix('{}/gateway/list'.format(ETCD_PREFIX))]
 
     ###
     # Gateway slice
     ###
-    def add_gw_slice(self, gateway, slice, data):
-        self.etcd.put('{}/gateway/{}/slice/{}'.format(ETCD_PREFIX, gateway, slice), json.dumps(data))
+    def add_gw_slice(self, gateway, slice):
+        self.etcd.put('{}/gateway/{}/slice/{}'.format(ETCD_PREFIX, gateway, slice), slice)
 
     def get_gw_slice(self, gateway, slice):
         sl = self.etcd.get('{}/gateway/{}/slice/{}'.format(ETCD_PREFIX, gateway, slice))[0]
@@ -112,12 +138,5 @@ class Sw4iotEtcd:
     def delete_gw_slice(self, gateway, slice):
         return self.etcd.delete_prefix('{}/gateway/{}/slice/{}'.format(ETCD_PREFIX, gateway, slice))
 
-    def add_gw_slice_info(self, gateway, slice, data):
-        self.etcd.put('{}/gateway/{}/slice/{}/info'.format(ETCD_PREFIX, gateway, slice), json.dumps(data))
-
-    def get_gw_slice_info(self, gateway, slice):
-        info = self.etcd.get('{}/gateway/{}/slice/{}/info'.format(ETCD_PREFIX, gateway, slice))[0]
-        return json.loads(info) if info else None
-
-    def del_gw_slice_info(self, gateway, slice):
-        return self.etcd.delete('{}/gateway/{}/slice/{}/info'.format(ETCD_PREFIX, gateway, slice))
+    def get_gw_slices(self, gateway):
+        return [slice[0] for slice in self.etcd.get_prefix('{}/gateway/{}/slice'.format(ETCD_PREFIX, gateway))]
