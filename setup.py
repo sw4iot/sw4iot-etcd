@@ -17,7 +17,7 @@ requirements = load_reqs('requirements.txt')
 
 setuptools.setup(
     name="sw4iot-etcd",
-    version="0.0.5",
+    version="0.0.6",
     author="SOFTWAY4IoT",
     author_email="softway4iot@gmail.com",
     description="Etcd of SOFTWAY4IoT",
