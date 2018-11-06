@@ -101,6 +101,12 @@ class Sw4iotEtcd:
     def get_slice_gws(self, slice):
         return [decode_utf8(gw[0]) for gw in self.etcd.get_prefix('{}/slice/{}/gateway/list'.format(ETCD_PREFIX, slice))]
 
+    def add_slice_gw_driver(self, slice, gateway, driver):
+        self.etcd.put('{}/slice/{}/gateway/driver/{}'.format(ETCD_PREFIX, slice, gateway), driver)
+
+    def del_slice_gw_driver(self, slice, gateway, driver):
+        self.etcd.delete('{}/slice/{}/gateway/driver/{}'.format(ETCD_PREFIX, slice, gateway))
+
     ###
     # Gateway
     ###
