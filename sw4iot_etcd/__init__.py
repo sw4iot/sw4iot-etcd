@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import json
+import os
 import etcd3
 
 ETCD_PREFIX = '/sw4iot.io'
@@ -25,6 +26,15 @@ def decode_utf8(text):
 
 
 class Sw4iotEtcd:
+
+    @staticmethod
+    def get_instance():
+        """ Static access method.
+        :rtype: Sw4iotEtcd
+        :return: Sw4iotEtcd instance
+        """
+        return Sw4iotEtcd(host=os.environ.get('SW4IOT_ETCD_HOST', 'contiv_etcd'),
+                          port=os.environ.get('SW4IOT_ETCD_PORT', '6666'))
 
     def __init__(self, host, port):
         self.host = host
